@@ -1,0 +1,715 @@
+<title>NewDen 入れ子表示</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Shippori+Mincho:wght@600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#EDF0EB; --screen:#FFFFFF; --panel:#F4F6F2; --ink:#18201B; --muted:#58635C;
+  --line:#2B3D5B; --line-soft:#A7B2C3; --tint:#E5EFDC; --accent:#2E7A4C; --accent-ink:#FFFFFF;
+  --accent-soft:#D6EADC; --ref:#3A5A9A; --ref-ink:#FFFFFF; --frame:#1B211D;
+  --warn:#80540A; --warn-soft:#F5EAD3;
+  --sans:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --serif:"Shippori Mincho","Hiragino Mincho ProN","Noto Serif JP",serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0F1311; --screen:#161B18; --panel:#1C221E; --ink:#E4EAE5; --muted:#9AA59E;
+    --line:#9DB1D4; --line-soft:#4A5870; --tint:#1D2B20; --accent:#6BC38D; --accent-ink:#0C1810;
+    --accent-soft:#1E3526; --ref:#8FA8E0; --ref-ink:#0F1520; --frame:#000000;
+    --warn:#E3B660; --warn-soft:#2E2716;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0F1311; --screen:#161B18; --panel:#1C221E; --ink:#E4EAE5; --muted:#9AA59E;
+  --line:#9DB1D4; --line-soft:#4A5870; --tint:#1D2B20; --accent:#6BC38D; --accent-ink:#0C1810;
+  --accent-soft:#1E3526; --ref:#8FA8E0; --ref-ink:#0F1520; --frame:#000000;
+  --warn:#E3B660; --warn-soft:#2E2716;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.65;padding-inline:16px;padding-block:28px 56px}
+button,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.page{max-width:1060px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+.masthead{display:flex;flex-direction:column;gap:6px;max-width:62ch}
+.wordmark{display:flex;align-items:center;gap:12px;font-family:var(--serif);font-weight:700;font-size:34px;line-height:1.1;letter-spacing:.01em}
+.wordmark small{font-family:var(--sans);font-weight:500;font-size:13px;color:var(--muted);letter-spacing:.12em}
+.masthead p{margin:0;color:var(--muted)}
+
+.layout{display:grid;grid-template-columns:minmax(0,410px) minmax(0,1fr);gap:44px;align-items:start}
+@media (max-width:880px){.layout{grid-template-columns:minmax(0,1fr);justify-items:center}.side{width:100%;max-width:560px}}
+
+/* phone */
+.phone{width:100%;max-width:410px;background:var(--frame);border-radius:46px;padding:11px}
+.screen{background:var(--panel);border-radius:36px;padding:12px 12px 18px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+.island{width:92px;height:25px;border-radius:13px;background:var(--frame);margin:0 auto 2px}
+@media (max-width:520px){.phone{padding:0;background:none;border-radius:0}.screen{border-radius:18px;padding:12px 10px 16px;border:1px solid var(--line-soft)}.island{display:none}}
+
+.topbar{display:flex;flex-direction:column;gap:8px}
+.views{display:flex;gap:4px;background:var(--screen);border:1px solid var(--line-soft);border-radius:10px;padding:3px;overflow-x:auto}
+.views button{flex:1 0 auto;border:0;background:none;padding:4px 8px;border-radius:7px;font-size:12px;color:var(--muted);white-space:nowrap}
+.views button[aria-selected="true"]{background:var(--accent-soft);color:var(--ink);font-weight:700}
+.views button:disabled{opacity:.5;cursor:not-allowed}
+.crumbs{display:flex;align-items:center;gap:2px;overflow-x:auto;white-space:nowrap;scrollbar-width:none;min-height:30px}
+.crumbs::-webkit-scrollbar{display:none}
+.crumbs button{border:0;background:none;padding:4px 6px;border-radius:6px;font-size:13px;color:var(--muted);max-width:11em;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.crumbs button[aria-current="true"]{color:var(--ink);font-weight:700}
+.crumbs button:hover{background:var(--screen)}
+.crumbs .sep{color:var(--line-soft);font-size:13px}
+
+.board{position:relative;width:100%;aspect-ratio:1/1;max-width:100%;overflow:hidden;touch-action:none;background:var(--screen);border-radius:14px;user-select:none;-webkit-user-select:none;cursor:default}
+.world{position:absolute;inset:0}
+.den{position:absolute;left:0;top:0;transform-origin:0 0}
+.den::after{content:"";position:absolute;inset:0;border:var(--bw) solid var(--line);pointer-events:none}
+.den.draft::after{border-style:dashed}
+.den.dim{opacity:.34}
+.cell{position:absolute;width:50%;height:50%;overflow:hidden;background:var(--screen);padding:var(--pad);display:flex;flex-direction:column;gap:2px;border:0 solid var(--line);cursor:pointer}
+.c0{left:0;top:0;background:var(--tint)}
+.c1{left:50%;top:0;border-left-width:var(--bw)}
+.c2{left:0;top:50%;border-top-width:var(--bw)}
+.c3{left:50%;top:50%;border-left-width:var(--bw);border-top-width:var(--bw)}
+.den.draft .cell{border-style:dashed}
+.cell.sel{box-shadow:inset 0 0 0 2.5px var(--accent)}
+.txt{font-size:var(--fs);line-height:1.45;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:var(--lines);overflow:hidden;overflow-wrap:anywhere}
+.c0 .txt{font-family:var(--serif);font-weight:700}
+.txt.ph{color:var(--muted);opacity:.6;font-family:var(--sans);font-weight:400}
+.tag{display:none;font-size:calc(var(--fs)*.7);letter-spacing:.1em;color:var(--accent);font-weight:700;line-height:1.3}
+.den.tags .c0 .tag{display:block}
+.has-child .txt,.has-child .tag{visibility:hidden}
+.skel{display:none}
+.den[data-mode="omit"] .cell{padding:0;display:grid;place-items:center}
+.den[data-mode="omit"] .txt,.den[data-mode="omit"] .tag{display:none}
+.den[data-mode="omit"] .cell:not(.empty):not(.has-child) .skel{display:block;width:56%;height:calc(var(--sk)*3.4);background:repeating-linear-gradient(to bottom,var(--line-soft) 0 var(--sk),transparent var(--sk) calc(var(--sk)*2.4))}
+.badge{display:none;position:absolute;top:4px;right:4px;min-width:17px;height:17px;border-radius:9px;padding:0 5px;background:var(--ref);color:var(--ref-ink);font:500 10.5px/17px var(--mono);text-align:center}
+.den.badges .badge{display:block}
+.lnk{position:absolute;right:5px;bottom:2px;color:var(--ref);font-weight:700;font-size:max(10px,calc(var(--fs)*1.05))}
+.den[data-mode="omit"] .lnk{font-size:10px;right:2px;bottom:0}
+
+.status{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);padding-inline:2px}
+.status .depth{font-family:var(--mono);color:var(--ink);white-space:nowrap}
+.status .hint{text-align:right}
+
+.sheet{background:var(--screen);border:1px solid var(--line-soft);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:10px;min-height:150px}
+.sheet-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;font-size:13px}
+.sheet-head .kind{font-weight:700}
+.sheet-head .slot{color:var(--accent);font-weight:700}
+.sheet-head .date{margin-left:auto;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.sheet-empty{margin:0;color:var(--muted);font-size:13.5px}
+.sheet textarea{width:100%;font-size:16px;line-height:1.5;border:1px solid var(--line-soft);border-radius:10px;padding:9px 11px;background:var(--panel);resize:vertical;min-height:62px}
+.acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{border:1px solid var(--line-soft);background:var(--screen);padding:6px 12px;border-radius:9px;font-size:13px;cursor:pointer}
+.btn:hover:not(:disabled){border-color:var(--line)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:transparent;font-weight:700}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.field{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted)}
+.field select{font-size:13px;padding:5px 6px;border-radius:8px;border:1px solid var(--line-soft);background:var(--screen)}
+.field select:disabled{opacity:.55}
+.chip{display:inline-block;font-size:11.5px;font-weight:700;padding:1px 8px;border-radius:999px;letter-spacing:.04em}
+.chip.ok{background:var(--accent-soft);color:var(--accent)}
+.chip.draft{background:var(--warn-soft);color:var(--warn)}
+.notes{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:var(--muted)}
+.notes li{padding-left:12px;position:relative}
+.notes li::before{content:"";position:absolute;left:0;top:.7em;width:5px;height:1.5px;background:var(--line-soft)}
+.jump{border:0;background:none;padding:0;color:var(--ref);text-decoration:underline;text-underline-offset:2px;cursor:pointer;font-size:12.5px;text-align:left}
+
+.toast{position:absolute;left:50%;bottom:22px;transform:translate(-50%,8px);background:var(--ink);color:var(--screen);font-size:12.5px;padding:7px 14px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;width:max-content;max-width:88%;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* sidebar */
+.side{display:flex;flex-direction:column;gap:26px;min-width:0}
+.side section{display:flex;flex-direction:column;gap:10px}
+.side h2{margin:0;font-size:13px;letter-spacing:.12em;color:var(--muted);font-weight:700}
+.side p{margin:0;max-width:60ch}
+.seg{display:inline-flex;background:var(--screen);border:1px solid var(--line-soft);border-radius:11px;padding:3px;gap:3px;align-self:flex-start;flex-wrap:wrap}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{padding:6px 14px;border-radius:8px;font-size:14px;cursor:pointer;color:var(--muted)}
+.seg input:checked+label{background:var(--accent);color:var(--accent-ink);font-weight:700}
+.seg input:focus-visible+label{outline:2px solid var(--accent);outline-offset:2px}
+.trees{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.tree{width:100%;text-align:left;display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:12px;border:1px solid var(--line-soft);background:var(--screen);cursor:pointer}
+.tree.on{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.tname{font-family:var(--serif);font-weight:700;font-size:15.5px}
+.tmeta{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.tlink{font-size:12px;color:var(--ref)}
+.legend{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px 16px;font-size:13px}
+.legend li{display:flex;align-items:center;gap:10px}
+.sw{flex:none;width:30px;height:30px;border:1.5px solid var(--line);background:var(--screen);position:relative;display:grid;place-items:center}
+.sw.theme{background:var(--tint)}
+.sw.draft{border-style:dashed}
+.sw .badge{display:block;top:-7px;right:-9px}
+.sw .lnk{right:3px;bottom:0;font-size:13px}
+.sw .skel{display:block;width:60%;height:10px;background:repeating-linear-gradient(to bottom,var(--line-soft) 0 2px,transparent 2px 4.5px)}
+.checks{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px;max-width:60ch}
+.reset{align-self:flex-start}
+@media (prefers-reduced-motion: reduce){.toast{transition:none}}
+</style>
+
+<div class="page">
+  <header class="masthead">
+    <div class="wordmark">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect x="1.5" y="1.5" width="15.5" height="15.5" fill="var(--tint)"/><rect x="1.5" y="1.5" width="31" height="31" fill="none" stroke="var(--line)" stroke-width="2.5"/><path d="M17 1.5V32.5M1.5 17H32.5" stroke="var(--line)" stroke-width="2"/></svg>
+      NewDen <small>入れ子表示モック</small>
+    </div>
+    <p>docs/concept.md の決定事項をもとにした試作です。ズームの方式を2つ切り替えて、入れ子表示のジェスチャーを比べられます。書いた内容はこのブラウザにだけ保存されます。</p>
+  </header>
+
+  <main class="layout">
+    <section class="phone" aria-label="アプリの画面">
+      <div class="screen">
+        <div class="island" aria-hidden="true"></div>
+        <div class="topbar">
+          <div class="views" role="tablist" aria-label="表示の切り替え">
+            <button role="tab" aria-selected="true">入れ子</button>
+            <button role="tab" aria-selected="false" disabled title="このモックでは入れ子表示だけを試せます">ツリー</button>
+            <button role="tab" aria-selected="false" disabled title="このモックでは入れ子表示だけを試せます">アウトライン</button>
+            <button role="tab" aria-selected="false" disabled title="このモックでは入れ子表示だけを試せます">タイムライン</button>
+          </div>
+          <nav class="crumbs" id="crumbs" aria-label="いまいる場所"></nav>
+        </div>
+        <div class="board" id="board" aria-label="田の入れ子表示"><div class="world" id="world"></div></div>
+        <div class="status"><span class="depth" id="depth"></span><span class="hint" id="hint"></span></div>
+        <div class="sheet" id="sheet" aria-live="polite"></div>
+        <div class="toast" id="toast" role="status"></div>
+      </div>
+    </section>
+
+    <aside class="side">
+      <section>
+        <h2>ズームの方式</h2>
+        <div class="seg" role="radiogroup" aria-label="ズームの方式">
+          <input type="radio" name="mode" id="mode-free" value="free" checked><label for="mode-free">連続ズーム</label>
+          <input type="radio" name="mode" id="mode-step" value="step"><label for="mode-step">段階ズーム</label>
+        </div>
+        <p id="modeDesc"></p>
+      </section>
+
+      <section>
+        <h2>田んぼ</h2>
+        <ul class="trees" id="trees"></ul>
+      </section>
+
+      <section>
+        <h2>凡例</h2>
+        <ul class="legend">
+          <li><span class="sw theme"></span>主題のマス</li>
+          <li><span class="sw draft"></span>未完の田（点線）</li>
+          <li><span class="sw"><span class="skel"></span></span>文字を省略したマス</li>
+          <li><span class="sw"><span class="badge">2</span></span>参照（使われている数）</li>
+          <li><span class="sw"><span class="lnk">↗</span></span>別の田んぼへのリンク</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>このモックで確かめたいこと</h2>
+        <ol class="checks">
+          <li>連続ズームと段階ズームのどちらが、全体を一望しやすく、迷いにくいか。</li>
+          <li>上の階層へ戻る操作は、指を閉じる・パンくず・周りの田をタップ・主題のマスの「親の田へ」のどれが自然か。</li>
+          <li>周りの田が薄く見えていることで、いまの位置がわかりやすくなるか。</li>
+          <li>文字を省略し始める大きさ（今は1マスが約62px未満）は適切か。</li>
+          <li>3つ埋めないと子を作れない制約が、書く流れを止めすぎないか。</li>
+        </ol>
+      </section>
+
+      <button class="btn reset" id="reset" type="button">サンプルに戻す</button>
+    </aside>
+  </main>
+</div>
+
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+  const TYPES = {
+    goal:   { name:'目標',   theme:'目標',         el:'要素' },
+    event:  { name:'出来事', theme:'今日あったこと', el:'気づき' },
+    feel:   { name:'感情',   theme:'今の気持ち',     el:'理由' },
+    ask:    { name:'問い',   theme:'問い',         el:'仮説' },
+    choice: { name:'迷い',   theme:'決めたいこと',   el:'判断の基準' },
+    tgt:    { name:'Three Good Things', theme:'日付', el:'良かったこと' },
+  };
+  const TYPE_ORDER = ['goal','event','feel','ask','choice','tgt'];
+  const MAX_DEPTH = 3;             // 0始まり。第4層まで
+  const KEY = 'newden-mock-v1';
+  const MODE_KEY = 'newden-mock-mode';
+  const today = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; })();
+
+  function sample() {
+    const s = { trees:{}, dens:{}, texts:{}, seq:0 };
+    const T = v => { const id = 'x' + (++s.seq); s.texts[id] = v; return id; };
+    const den = (tree, type, themeTid, els, created, parent) => {
+      const id = 'd' + (++s.seq);
+      s.dens[id] = { id, tree, type, parent: parent || null,
+        cells: [themeTid, ...els.map(e => typeof e === 'string' ? T(e) : e.tid)],
+        child: [null,null,null,null], link: [null,null,null,null], created };
+      if (parent) s.dens[parent.den].child[parent.idx] = id;
+      return id;
+    };
+    const sub = (p, idx, type, els, created) => den(s.dens[p].tree, type, s.dens[p].cells[idx], els, created, { den:p, idx });
+
+    const root = den('t1','goal', T('健やかに働き続ける'), ['よく眠る','体を動かす','考えを外に出す'], '2026-09-14');
+    const sleep = sub(root, 1, 'goal', ['23時に画面を閉じる','朝日を浴びる','カフェインは14時まで'], '2026-09-15');
+    const screen = sub(sleep, 1, 'goal', ['寝室に充電器を置かない','紙の本を用意する','22:45にアラーム'], '2026-09-16');
+    sub(screen, 2, 'goal', ['積読を寝室へ移す','1晩10ページ',''], '2026-09-22');
+    const move = sub(root, 2, 'goal', ['週2で泳ぐ','一駅手前で降りる','階段を使う'], '2026-09-15');
+    const swim = sub(move, 1, 'choice', ['料金','通いやすさ','続けられる時間帯'], '2026-09-18');
+    const time = sub(swim, 3, 'ask', ['朝7時','昼休み','仕事帰りに泳ぐ'], '2026-09-19');
+    const out = sub(root, 3, 'goal', ['NewDenに毎晩書く','週1で友人と話す','月1で一人の時間をとる'], '2026-09-17');
+    sub(out, 1, 'goal', ['寝る前の5分','Three Good Thingsで書く','週末に読み返す'], '2026-09-20');
+    s.trees.t1 = { id:'t1', root };
+
+    const r2 = den('t2','goal', s.dens[time].cells[3], ['夕食は泳いだ後に軽く','水着を会社に置く', { tid: s.dens[sleep].cells[1] }], '2026-09-21');
+    s.dens[time].link[3] = 't2';
+    s.trees.t2 = { id:'t2', root:r2 };
+
+    const r3 = den('t3','tgt', T('9月24日'), ['駅までの坂が楽になった','同僚が差し入れをくれた','紙の本を20ページ読めた'], '2026-09-24');
+    s.trees.t3 = { id:'t3', root:r3 };
+    return s;
+  }
+
+  let S = null;
+  try { const raw = localStorage.getItem(KEY); if (raw) S = JSON.parse(raw); } catch (e) {}
+  if (!S || !S.dens || !S.trees) S = sample();
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+
+  let savedMode = 'free';
+  try { savedMode = localStorage.getItem(MODE_KEY) || 'free'; } catch (e) {}
+
+  const view = { tree:Object.keys(S.trees)[0], focus:null, sel:null, clip:null, mode:savedMode === 'step' ? 'step' : 'free', cam:{ cx:.5, cy:.5, z:300 }, B:360, rects:{} };
+  view.focus = S.trees[view.tree].root;
+
+  /* ---------- モデル ---------- */
+  const D = id => S.dens[id];
+  const txt = tid => (S.texts[tid] ?? '');
+  const filled = tid => txt(tid).trim() !== '';
+  function depthOf(id) { let d = 0, p = D(id).parent; while (p) { d++; p = D(p.den).parent; } return d; }
+  const missing = d => [1,2,3].filter(i => !filled(d.cells[i])).length;
+  const isComplete = d => missing(d) === 0;
+  const treeDens = t => Object.values(S.dens).filter(d => d.tree === t);
+  const treeMaxDepth = t => Math.max(...treeDens(t).map(d => depthOf(d.id)));
+  const treeName = t => txt(D(S.trees[t].root).cells[0]).trim() || '（無題の田んぼ）';
+  const denName = id => txt(D(id).cells[0]).trim() || '（主題なし）';
+  function inSubtree(id, anc) { let cur = id; while (cur) { if (cur === anc) return true; const p = D(cur).parent; cur = p ? p.den : null; } return false; }
+  function nextToward(target, from) { let cur = target, prev = null; while (cur && cur !== from) { prev = cur; const p = D(cur).parent; cur = p ? p.den : null; } return cur === from ? prev : null; }
+  const isBranchTarget = (t, tid) => Object.values(S.dens).some(d => d.link.some((l, i) => l === t && d.cells[i] === tid));
+  function placesOf(tid) {
+    const out = [];
+    for (const d of Object.values(S.dens)) for (let i = 1; i < 4; i++) if (d.cells[i] === tid) out.push({ den:d.id, idx:i });
+    for (const t of Object.keys(S.trees)) { const r = D(S.trees[t].root); if (r.cells[0] === tid && !isBranchTarget(t, tid)) out.push({ den:r.id, idx:0 }); }
+    return out;
+  }
+  function backlinks(t) { const out = []; for (const d of Object.values(S.dens)) d.link.forEach((l, i) => { if (l === t) out.push({ den:d.id, idx:i }); }); return out; }
+  const newText = (v = '') => { const id = 'x' + (++S.seq); S.texts[id] = v; return id; };
+  function newDen(tree, type, cells, parent) {
+    const id = 'd' + (++S.seq);
+    S.dens[id] = { id, tree, type, parent, cells, child:[null,null,null,null], link:[null,null,null,null], created:today };
+    if (parent) D(parent.den).child[parent.idx] = id;
+    return id;
+  }
+  const slotName = (d, i) => i === 0 ? `主題（${TYPES[d.type].theme}）` : `${TYPES[d.type].el} ${i}`;
+
+  /* ---------- カメラ ---------- */
+  function computeRects() {
+    const out = {};
+    (function walk(id, x, y, s) {
+      out[id] = { x, y, s };
+      const d = D(id), h = s / 2, off = [null, [h,0], [0,h], [h,h]];
+      for (let i = 1; i < 4; i++) if (d.child[i]) walk(d.child[i], x + off[i][0], y + off[i][1], h);
+    })(S.trees[view.tree].root, 0, 0, 1);
+    view.rects = out;
+  }
+  function fitCam(id) { const r = view.rects[id], pad = view.B * 0.045; return { cx:r.x + r.s/2, cy:r.y + r.s/2, z:(view.B - 2*pad) / r.s }; }
+  const w2s = (x, y) => { const c = view.cam; return [(x - c.cx) * c.z + view.B/2, (y - c.cy) * c.z + view.B/2]; };
+  const s2w = (x, y) => { const c = view.cam; return [(x - view.B/2) / c.z + c.cx, (y - view.B/2) / c.z + c.cy]; };
+  const clampZ = z => Math.min(view.B * 8 * 1.6, Math.max(view.B * 0.5, z));
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  let anim = 0;
+  function animateCam(to, ms = 420) {
+    cancelAnimationFrame(anim);
+    if (reduce.matches) { view.cam = to; layout(); return; }
+    const from = { ...view.cam }, t0 = performance.now(), lz0 = Math.log(from.z), lz1 = Math.log(to.z);
+    const step = now => {
+      const t = Math.min(1, (now - t0) / ms), e = t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+      view.cam = { cx:from.cx + (to.cx - from.cx) * e, cy:from.cy + (to.cy - from.cy) * e, z:Math.exp(lz0 + (lz1 - lz0) * e) };
+      layout();
+      if (t < 1) anim = requestAnimationFrame(step);
+    };
+    anim = requestAnimationFrame(step);
+  }
+
+  /* ---------- 描画 ---------- */
+  const world = $('#world'), board = $('#board'), sheet = $('#sheet');
+  let denEls = {};
+  function buildWorld() {
+    computeRects();
+    world.textContent = '';
+    denEls = {};
+    for (const id of Object.keys(view.rects)) {
+      const d = D(id), dep = depthOf(id), el = document.createElement('div');
+      el.className = 'den' + (isComplete(d) ? '' : ' draft');
+      el.dataset.den = id;
+      el.style.zIndex = dep + 1;
+      el.style.setProperty('--bw', [2.5, 1.6, 1.1, 1][dep] + 'px');
+      const cells = [];
+      for (let i = 0; i < 4; i++) {
+        const c = document.createElement('div');
+        c.className = 'cell c' + i + (i > 0 && d.child[i] ? ' has-child' : '');
+        c.dataset.den = id; c.dataset.idx = i;
+        const v = txt(d.cells[i]).trim();
+        c.classList.toggle('empty', !v);
+        const tag = document.createElement('span'); tag.className = 'tag'; tag.textContent = i === 0 ? TYPES[d.type].name : '';
+        const t = document.createElement('span'); t.className = 'txt';
+        if (v) t.textContent = v; else { t.textContent = i === 0 ? TYPES[d.type].theme : TYPES[d.type].el; t.classList.add('ph'); }
+        const sk = document.createElement('span'); sk.className = 'skel';
+        c.append(tag, t, sk);
+        if (i > 0 && d.link[i]) { const l = document.createElement('span'); l.className = 'lnk'; l.textContent = '↗'; c.append(l); }
+        const n = placesOf(d.cells[i]).length;
+        if (n > 1) { const b = document.createElement('span'); b.className = 'badge'; b.textContent = n; c.append(b); }
+        el.append(c); cells.push(c);
+      }
+      world.append(el);
+      denEls[id] = { el, cells };
+    }
+  }
+
+  function layout() {
+    const B = view.B, f = view.focus;
+    for (const [id, { el }] of Object.entries(denEls)) {
+      const r = view.rects[id], [x, y] = w2s(r.x, r.y), s = r.s * view.cam.z;
+      const off = x > B || y > B || x + s < 0 || y + s < 0 || s < 4;
+      el.hidden = off;
+      if (off) continue;
+      el.style.transform = `translate(${x}px,${y}px)`;
+      el.style.width = el.style.height = s + 'px';
+      el.classList.toggle('dim', !inSubtree(id, f));
+      const cp = s / 2;
+      if (cp >= 62) {
+        const fs = Math.max(10, Math.min(18, cp * 0.085)), pad = Math.max(6, cp * 0.07), tags = cp >= 120;
+        el.dataset.mode = 'full';
+        el.style.setProperty('--fs', fs + 'px');
+        el.style.setProperty('--pad', pad + 'px');
+        el.style.setProperty('--lines', Math.max(1, Math.floor((cp - 2*pad - (tags ? fs*1.3 : 0)) / (fs * 1.45))));
+        el.classList.toggle('tags', tags);
+      } else {
+        el.dataset.mode = 'omit';
+        el.style.setProperty('--sk', Math.max(1.2, cp * 0.05) + 'px');
+      }
+      el.classList.toggle('badges', cp >= 36);
+    }
+    world.querySelectorAll('.cell.sel').forEach(c => c.classList.remove('sel'));
+    if (view.sel && denEls[view.sel.den]) denEls[view.sel.den].cells[view.sel.idx].classList.add('sel');
+    $('#depth').textContent = `第${depthOf(f) + 1}層 / 4`;
+  }
+
+  function renderCrumbs() {
+    const nav = $('#crumbs'), chain = [];
+    let cur = view.focus;
+    while (cur) { chain.unshift(cur); const p = D(cur).parent; cur = p ? p.den : null; }
+    nav.textContent = '';
+    chain.forEach((id, i) => {
+      if (i) { const s = document.createElement('span'); s.className = 'sep'; s.textContent = '›'; nav.append(s); }
+      const b = document.createElement('button');
+      b.type = 'button'; b.textContent = denName(id); b.title = denName(id);
+      if (id === view.focus) b.setAttribute('aria-current', 'true');
+      b.addEventListener('click', () => focusTo(id));
+      nav.append(b);
+    });
+    nav.scrollLeft = nav.scrollWidth;
+  }
+
+  const chip = d => isComplete(d) ? '<span class="chip ok">完成</span>' : `<span class="chip draft">未完 · あと${missing(d)}つ</span>`;
+  const btn = (act, label, { disabled = false, primary = false, data = '' } = {}) =>
+    `<button type="button" class="btn${primary ? ' primary' : ''}" data-act="${act}" ${data} ${disabled ? 'disabled' : ''}>${esc(label)}</button>`;
+
+  function renderSheet() {
+    const f = D(view.focus);
+    if (!view.sel) {
+      sheet.innerHTML = `<div class="sheet-head"><span class="kind">${esc(TYPES[f.type].name)}の田</span>${chip(f)}<span class="date">${f.created} 作成</span></div>
+        <p class="sheet-empty">マスをタップすると、ここで書き込めます。周りの薄い田をタップすると、その田へ移動します。</p>`;
+      return;
+    }
+    const d = D(view.sel.den), i = view.sel.idx;
+    sheet.innerHTML = `<div class="sheet-head"><span class="kind">${esc(TYPES[d.type].name)}の田</span><span class="slot">${esc(slotName(d, i))}</span><span class="date">${d.created} 作成</span></div>
+      <textarea id="cellText" rows="2" placeholder="${esc(i === 0 ? TYPES[d.type].theme : TYPES[d.type].el)}を書く"></textarea>
+      <div id="sheetDyn" class="sheet" style="border:0;padding:0;min-height:0;background:none"></div>`;
+    $('#cellText').value = txt(d.cells[i]);
+    renderActions();
+  }
+
+  function renderActions() {
+    const box = $('#sheetDyn');
+    if (!box || !view.sel) return;
+    const d = D(view.sel.den), i = view.sel.idx, dep = depthOf(d.id), tid = d.cells[i];
+    const acts = [], notes = [];
+    const typeOpts = sel => TYPE_ORDER.map(k => `<option value="${k}"${k === sel ? ' selected' : ''}>${esc(TYPES[k].name)}</option>`).join('');
+
+    if (i === 0) {
+      acts.push(`<label class="field">型 <select id="typeSel"${isComplete(d) ? ' disabled' : ''}>${typeOpts(d.type)}</select></label>`);
+      if (isComplete(d)) notes.push('完成した田の型は変えられません。考えが変わったときは「発展」で新しい田を作ります（このモックでは未実装）。');
+      if (d.parent) acts.push(btn('up', '親の田へ'));
+      else {
+        const branch = treeMaxDepth(d.tree) >= MAX_DEPTH;
+        acts.push(btn('make-parent', branch ? '親の田を作る（ブランチ）' : '親の田を作る', { primary:true }));
+        notes.push(branch ? 'この田んぼはすでに4層あるので、親の田は新しい田んぼに作り、リンクでつなぎます。'
+                          : '「これは何のため？」と考えて、1つ上の田を作ります。');
+      }
+      if (!d.parent) backlinks(d.tree).forEach(b => notes.push(`<button type="button" class="jump" data-act="jump" data-den="${b.den}" data-idx="${b.idx}">リンク元：${esc(treeName(D(b.den).tree))} の「${esc(denName(b.den))}」の田</button>`));
+    } else if (d.child[i]) {
+      acts.push(btn('dive', '子の田へ', { primary:true }));
+    } else if (d.link[i]) {
+      acts.push(btn('go-link', 'リンク先の田んぼへ ↗', { primary:true }));
+    } else {
+      const branch = dep >= MAX_DEPTH, ok = isComplete(d) && filled(tid);
+      acts.push(`<label class="field">子の型 <select id="childType">${typeOpts('goal')}</select></label>`);
+      acts.push(btn('make-child', branch ? 'ブランチを切る' : '子の田を作る', { disabled:!ok, primary:true }));
+      if (!isComplete(d)) notes.push(`子の田は、3つの要素がすべて埋まってから作れます（あと${missing(d)}つ）。`);
+      else if (branch) notes.push('ここは第4層です。子の田は新しい田んぼとして作り、このマスからリンクします。');
+      if (view.clip && view.clip !== tid && !filled(tid)) acts.push(btn('paste-ref', '参照を貼る'));
+    }
+    if (i > 0 && filled(tid) && view.clip !== tid) acts.push(btn('copy-ref', '参照をコピー'));
+
+    const pl = placesOf(tid);
+    if (pl.length > 1) {
+      notes.push(`この内容は ${pl.length} か所で使われています。直すとすべてに反映されます。`);
+      pl.filter(p => !(p.den === d.id && p.idx === i) && !(D(d.id).parent && p.den === D(d.id).parent.den && p.idx === D(d.id).parent.idx))
+        .forEach(p => notes.push(`<button type="button" class="jump" data-act="jump" data-den="${p.den}" data-idx="${p.idx}">${esc(treeName(D(p.den).tree))} ›「${esc(denName(p.den))}」の${esc(slotName(D(p.den), p.idx))}</button>`));
+    }
+    box.innerHTML = `<div class="acts">${chip(d)}</div><div class="acts">${acts.join('')}</div>${notes.length ? `<ul class="notes">${notes.map(n => `<li>${n}</li>`).join('')}</ul>` : ''}`;
+  }
+
+  function renderTrees() {
+    const ul = $('#trees');
+    ul.innerHTML = Object.keys(S.trees).map(t => {
+      const bl = backlinks(t);
+      const fw = [...new Set(treeDens(t).flatMap(d => d.link.filter(Boolean)))];
+      return `<li><button type="button" class="tree${t === view.tree ? ' on' : ''}" data-tree="${t}">
+        <span class="tname">${esc(treeName(t))}</span>
+        <span class="tmeta">田 ${treeDens(t).length}個 · ${treeMaxDepth(t) + 1}/4層</span>
+        ${bl.length ? `<span class="tlink">← ${bl.map(b => esc(treeName(D(b.den).tree))).join('、')} からリンク</span>` : ''}
+        ${fw.length ? `<span class="tlink">→ ${fw.map(x => esc(treeName(x))).join('、')} へリンク</span>` : ''}
+      </button></li>`;
+    }).join('');
+  }
+
+  const MODE_TEXT = {
+    free: { desc:'地図アプリのように自由に拡大縮小します。指を離すと、画面の中心にある田が「いま見ている田」になります。', hint:'ピンチ・ホイールで拡大縮小 / ドラッグで移動' },
+    step: { desc:'拡大縮小は1段ずつです。指を広げると指の下の田へ入り、指を閉じると1つ上の田へ戻ります。画面はいつも1つの田にぴったり合います。', hint:'指を広げて入る / 閉じて戻る' },
+  };
+  function renderMode() {
+    $('#modeDesc').textContent = MODE_TEXT[view.mode].desc;
+    $('#hint').textContent = MODE_TEXT[view.mode].hint;
+    $('#mode-' + view.mode).checked = true;
+    board.style.cursor = view.mode === 'free' ? 'grab' : 'default';
+  }
+
+  let toastT = 0;
+  function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2200); }
+
+  /* ---------- 移動 ---------- */
+  function focusTo(id, sel = null) {
+    view.focus = id; view.sel = sel;
+    renderCrumbs(); renderSheet();
+    animateCam(fitCam(id));
+  }
+  function openTree(t, focus, sel = null) {
+    view.tree = t;
+    buildWorld();
+    view.focus = focus || S.trees[t].root;
+    view.sel = sel;
+    view.cam = fitCam(view.focus);
+    layout(); renderCrumbs(); renderSheet(); renderTrees();
+    if (!reduce.matches) world.animate([{ opacity:0, transform:'scale(.97)' }, { opacity:1, transform:'none' }], { duration:260, easing:'ease-out' });
+  }
+  function settleFocus() {
+    let best = S.trees[view.tree].root, bd = -1;
+    for (const [id, r] of Object.entries(view.rects)) {
+      const { cx, cy, z } = view.cam;
+      if (cx >= r.x && cx <= r.x + r.s && cy >= r.y && cy <= r.y + r.s && r.s * z >= view.B * 0.55) {
+        const dp = depthOf(id); if (dp > bd) { bd = dp; best = id; }
+      }
+    }
+    if (best !== view.focus) {
+      view.focus = best;
+      if (view.sel && view.sel.den !== best) view.sel = null;
+      renderCrumbs(); renderSheet();
+    }
+    layout();
+  }
+  function onTap(x, y) {
+    const el = document.elementFromPoint(x, y), c = el && el.closest('.cell');
+    if (!c) return;
+    const id = c.dataset.den, i = +c.dataset.idx, f = view.focus;
+    if (id === f) {
+      const d = D(id);
+      if (i > 0 && d.child[i]) { focusTo(d.child[i]); return; }
+      view.sel = { den:id, idx:i }; renderSheet(); layout();
+      return;
+    }
+    if (inSubtree(id, f)) { focusTo(nextToward(id, f)); return; }
+    focusTo(id);
+  }
+  function stepIn(pt) {
+    const rect = board.getBoundingClientRect();
+    const el = document.elementFromPoint(rect.left + pt[0], rect.top + pt[1]), c = el && el.closest('.cell');
+    if (c && c.dataset.den !== view.focus && inSubtree(c.dataset.den, view.focus)) { focusTo(nextToward(c.dataset.den, view.focus)); return; }
+    toast('この位置には子の田がありません');
+  }
+  function stepOut() {
+    const p = D(view.focus).parent;
+    if (p) focusTo(p.den); else toast('いちばん上の田です。主題のマスから親の田を作れます');
+  }
+
+  /* ---------- ジェスチャー ---------- */
+  const P = new Map();
+  let g = null;
+  const local = (x, y) => { const r = board.getBoundingClientRect(); return [x - r.left, y - r.top]; };
+  board.addEventListener('pointerdown', e => {
+    board.setPointerCapture(e.pointerId);
+    P.set(e.pointerId, { x:e.clientX, y:e.clientY });
+    if (P.size === 1) g = { type:'one', sx:e.clientX, sy:e.clientY, moved:false, cam:{ ...view.cam } };
+    else if (P.size === 2) {
+      const [a, b] = [...P.values()], mid = local((a.x + b.x) / 2, (a.y + b.y) / 2);
+      cancelAnimationFrame(anim);
+      g = { type:'pinch', d0:Math.hypot(a.x - b.x, a.y - b.y) || 1, cam:{ ...view.cam }, mid, wmid:s2w(...mid), fired:false };
+    }
+  });
+  board.addEventListener('pointermove', e => {
+    if (!P.has(e.pointerId) || !g) return;
+    P.set(e.pointerId, { x:e.clientX, y:e.clientY });
+    if (g.type === 'one' && P.size === 1) {
+      const dx = e.clientX - g.sx, dy = e.clientY - g.sy;
+      if (!g.moved && Math.hypot(dx, dy) > 6) { g.moved = true; cancelAnimationFrame(anim); }
+      if (g.moved && view.mode === 'free') { view.cam = { ...g.cam, cx:g.cam.cx - dx / g.cam.z, cy:g.cam.cy - dy / g.cam.z }; layout(); }
+    } else if (g.type === 'pinch' && P.size >= 2) {
+      const [a, b] = [...P.values()], ratio = Math.hypot(a.x - b.x, a.y - b.y) / g.d0;
+      if (view.mode === 'free') {
+        const z = clampZ(g.cam.z * ratio);
+        view.cam = { z, cx:g.wmid[0] - (g.mid[0] - view.B/2) / z, cy:g.wmid[1] - (g.mid[1] - view.B/2) / z };
+        layout();
+      } else if (!g.fired) {
+        if (ratio > 1.3) { g.fired = true; stepIn(g.mid); }
+        else if (ratio < 0.77) { g.fired = true; stepOut(); }
+      }
+    }
+  });
+  function endPointer(e) {
+    if (!P.has(e.pointerId)) return;
+    P.delete(e.pointerId);
+    if (!g) return;
+    if (P.size === 0) {
+      if (g.type === 'one' && !g.moved && e.type === 'pointerup') onTap(e.clientX, e.clientY);
+      else if (view.mode === 'free' && (g.moved || g.type === 'pinch')) settleFocus();
+      g = null;
+    } else if (P.size === 1 && g.type === 'pinch') {
+      const [r] = [...P.values()];
+      g = { type:'one', sx:r.x, sy:r.y, moved:true, cam:{ ...view.cam } };
+    }
+  }
+  board.addEventListener('pointerup', endPointer);
+  board.addEventListener('pointercancel', endPointer);
+
+  let wheelAcc = 0, wheelLock = 0, settleT = 0;
+  board.addEventListener('wheel', e => {
+    e.preventDefault();
+    const [mx, my] = local(e.clientX, e.clientY);
+    const dy = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
+    if (view.mode === 'free') {
+      cancelAnimationFrame(anim);
+      const [wx, wy] = s2w(mx, my), z = clampZ(view.cam.z * Math.exp(-dy * (e.ctrlKey ? 0.01 : 0.0015)));
+      view.cam = { z, cx:wx - (mx - view.B/2) / z, cy:wy - (my - view.B/2) / z };
+      layout();
+      clearTimeout(settleT); settleT = setTimeout(settleFocus, 160);
+    } else {
+      const now = performance.now();
+      if (now < wheelLock) return;
+      wheelAcc += dy * (e.ctrlKey ? 4 : 1);
+      if (wheelAcc < -80) { wheelAcc = 0; wheelLock = now + 450; stepIn([mx, my]); }
+      else if (wheelAcc > 80) { wheelAcc = 0; wheelLock = now + 450; stepOut(); }
+    }
+  }, { passive:false });
+
+  /* ---------- 操作パネル ---------- */
+  function refreshAll(keepSheet) {
+    buildWorld(); layout(); renderCrumbs(); renderTrees();
+    if (keepSheet) renderActions(); else renderSheet();
+  }
+  sheet.addEventListener('input', e => {
+    if (e.target.id !== 'cellText' || !view.sel) return;
+    S.texts[D(view.sel.den).cells[view.sel.idx]] = e.target.value;
+    save(); refreshAll(true);
+  });
+  sheet.addEventListener('change', e => {
+    if (e.target.id === 'typeSel' && view.sel) { D(view.sel.den).type = e.target.value; save(); refreshAll(false); }
+  });
+  sheet.addEventListener('click', e => {
+    const b = e.target.closest('[data-act]');
+    if (!b || b.disabled) return;
+    const sel = view.sel, d = sel && D(sel.den);
+    switch (b.dataset.act) {
+      case 'dive': focusTo(d.child[sel.idx]); break;
+      case 'up': focusTo(d.parent.den, { den:d.parent.den, idx:d.parent.idx }); break;
+      case 'go-link': openTree(d.link[sel.idx]); break;
+      case 'jump': { const id = b.dataset.den; openTree(D(id).tree, id, { den:id, idx:+b.dataset.idx }); break; }
+      case 'make-child': {
+        const type = $('#childType').value;
+        const cells = [d.cells[sel.idx], newText(), newText(), newText()];
+        if (depthOf(d.id) >= MAX_DEPTH) {
+          const t = 't' + (++S.seq), root = newDen(t, type, cells, null);
+          S.trees[t] = { id:t, root };
+          d.link[sel.idx] = t;
+          save(); openTree(t, root, { den:root, idx:1 });
+          toast('新しい田んぼを作り、元のマスからリンクしました');
+        } else {
+          const id = newDen(d.tree, type, cells, { den:d.id, idx:sel.idx });
+          save(); buildWorld(); focusTo(id, { den:id, idx:1 }); renderTrees();
+        }
+        break;
+      }
+      case 'make-parent': {
+        const t = d.tree;
+        if (treeMaxDepth(t) >= MAX_DEPTH) {
+          const nt = 't' + (++S.seq), root = newDen(nt, 'goal', [newText(), d.cells[0], newText(), newText()], null);
+          S.trees[nt] = { id:nt, root };
+          D(root).link[1] = t;
+          save(); openTree(nt, root, { den:root, idx:0 });
+          toast('新しい田んぼに親の田を作り、リンクでつなぎました');
+        } else {
+          const before = view.rects[d.id];
+          const p = newDen(t, 'goal', [newText(), d.cells[0], newText(), newText()], null);
+          D(p).child[1] = d.id; d.parent = { den:p, idx:1 }; S.trees[t].root = p;
+          save(); buildWorld();
+          const r = view.rects[d.id], k = r.s / before.s;
+          view.cam = { cx:r.x + (view.cam.cx - before.x) * k, cy:r.y + (view.cam.cy - before.y) * k, z:view.cam.z / k };
+          layout(); focusTo(p, { den:p, idx:0 }); renderTrees();
+        }
+        break;
+      }
+      case 'copy-ref': view.clip = d.cells[sel.idx]; renderActions(); toast('参照をコピーしました。空いている要素のマスで「参照を貼る」を押します'); break;
+      case 'paste-ref': d.cells[sel.idx] = view.clip; save(); refreshAll(false); toast('参照を貼りました。どちらを直しても両方に反映されます'); break;
+    }
+  });
+
+  $('#trees').addEventListener('click', e => { const b = e.target.closest('[data-tree]'); if (b) openTree(b.dataset.tree); });
+  document.querySelectorAll('input[name="mode"]').forEach(r => r.addEventListener('change', () => {
+    view.mode = r.value;
+    try { localStorage.setItem(MODE_KEY, view.mode); } catch (e) {}
+    renderMode();
+    if (view.mode === 'step') animateCam(fitCam(view.focus));
+  }));
+  $('#reset').addEventListener('click', () => { S = sample(); view.clip = null; save(); openTree('t1'); toast('サンプルに戻しました'); });
+
+  new ResizeObserver(() => {
+    const B = board.clientWidth;
+    if (!B || Math.abs(B - view.B) < 0.5) return;
+    view.B = B; view.cam = fitCam(view.focus); layout();
+  }).observe(board);
+
+  view.B = board.clientWidth || 360;
+  renderMode();
+  openTree(view.tree);
+})();
+</script>
