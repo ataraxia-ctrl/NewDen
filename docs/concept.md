@@ -175,6 +175,7 @@ HTML モック（`mocks/nested-view.html`）で連続ズームと段階ズーム
 
 - SwiftUI と SwiftData。
 - 同期は iCloud（CloudKit）を想定。
+- データモデルの設計は [data-model.md](data-model.md) を参照。
 
 ---
 
