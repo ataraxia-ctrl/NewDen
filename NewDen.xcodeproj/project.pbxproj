@@ -1,0 +1,683 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		07EE65C24DD960965FF79BD2 /* DenStore+History.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC18435AC35527804D7DC0FF /* DenStore+History.swift */; };
+		0A13C75BAB88878B75B5F201 /* DenKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2690A95791903C73E6815BC /* DenKind.swift */; };
+		0C22654163ADB155D73052D0 /* PaddySnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08AE4FB396393EEC6BE074D4 /* PaddySnapshot.swift */; };
+		1DBD9647B2205B01E5B72BA3 /* DenCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56F2765AAF66EF0EA5520E83 /* DenCellView.swift */; };
+		1F14E053F9DC5228863B4B2F /* NewDenApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D1C09979C798DD0D6F2F95D /* NewDenApp.swift */; };
+		22630642409838C0C7D73E02 /* DenEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 621DD89E77741966DC15FD08 /* DenEditorView.swift */; };
+		3189B3C9AC76A7AAF9BE1482 /* NewDenMigrationPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8A8CF20E3E77CA74CC7719A /* NewDenMigrationPlan.swift */; };
+		37854DD001316B90AEBC9C46 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5DDC57401300DC1F6DE203 /* Persistence.swift */; };
+		459B3BD043E18357D7C86838 /* CellEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A15FF9C69EAACD8EB793658 /* CellEditorView.swift */; };
+		4C149E19B81EB871E163370A /* ContentSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C33D0167EE0BD4B953168D /* ContentSnapshot.swift */; };
+		5457AF07368F1471489CCE16 /* NewPaddyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 400039878B14B785E27272E8 /* NewPaddyView.swift */; };
+		574AF45D706EA1E4227FAFDC /* DenStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178AF3CFB55F3E0ACF03F584 /* DenStore.swift */; };
+		5A6CA9B9B39B50A63C7EFAB8 /* AppRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85C9DD1CABCACC00F1F983AF /* AppRootView.swift */; };
+		68645E374893FF1F90FC5240 /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B59ACCA21E41B12995EA78 /* Content.swift */; };
+		68BA3BB6A87AD8ED474E2A63 /* DenCellLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80398DD02F8C34DE2D02562A /* DenCellLabel.swift */; };
+		8ACF672988196915FA31FA40 /* DenStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B67FCC421047EEF3A28059EF /* DenStoreError.swift */; };
+		9438956D63C37BD5CC34E44B /* Paddy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1650618670AFF3FC279B4D5F /* Paddy.swift */; };
+		9471E17A493820D7CA58557A /* DenStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDC13614A311884B99C9B519 /* DenStoreTests.swift */; };
+		9EA11A6E916B45DBAD9B3F72 /* NewDenSchemaV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3495CEF7EA57E21D5A1F431A /* NewDenSchemaV1.swift */; };
+		C170AA4ED1A94CDFC7D592C8 /* NewDenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18C9121C703DB426A7D141B /* NewDenUITests.swift */; };
+		C28317853DE909732E2B0B84 /* StoreStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF23D83F1F4A3D5022CDE74D /* StoreStatusView.swift */; };
+		C35EE81641D41BA16D96437E /* SlotSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9426BC146B2ED54051719B23 /* SlotSnapshot.swift */; };
+		C562D9C597CF935CEE057BEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 343AB646DEA2A322D3ADB7DE /* Assets.xcassets */; };
+		D57FC36B914FEAAAD2F70297 /* Den.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27D7DB9B5BBB32ABF06EB0E /* Den.swift */; };
+		D9199AE1D5A953A467409AC0 /* DenSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CCD9D95EA62543F59FA1C61 /* DenSnapshot.swift */; };
+		D9E3B0885937D879F29BA195 /* PaddyListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDE136C17F249E98A397691 /* PaddyListView.swift */; };
+		E7D27F5A7981E04FCC9753BB /* CellSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13578707F904432967DA36A4 /* CellSelection.swift */; };
+		FACC2F72A0BCB8556DA0F64E /* Slot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40400F11256E544F0276A44A /* Slot.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		08F2546FD607FC7AFF2D71F5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3556DF58EB6E7624CBE7ECA0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1583277D05D705D1A9860DFF;
+			remoteInfo = NewDen;
+		};
+		4370A4E6CE1A9E3AF0EC439B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3556DF58EB6E7624CBE7ECA0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1583277D05D705D1A9860DFF;
+			remoteInfo = NewDen;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		08AE4FB396393EEC6BE074D4 /* PaddySnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddySnapshot.swift; sourceTree = "<group>"; };
+		13578707F904432967DA36A4 /* CellSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellSelection.swift; sourceTree = "<group>"; };
+		1650618670AFF3FC279B4D5F /* Paddy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Paddy.swift; sourceTree = "<group>"; };
+		178AF3CFB55F3E0ACF03F584 /* DenStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenStore.swift; sourceTree = "<group>"; };
+		1CCD9D95EA62543F59FA1C61 /* DenSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenSnapshot.swift; sourceTree = "<group>"; };
+		21B59ACCA21E41B12995EA78 /* Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
+		2A15FF9C69EAACD8EB793658 /* CellEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellEditorView.swift; sourceTree = "<group>"; };
+		343AB646DEA2A322D3ADB7DE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3495CEF7EA57E21D5A1F431A /* NewDenSchemaV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDenSchemaV1.swift; sourceTree = "<group>"; };
+		3D1C09979C798DD0D6F2F95D /* NewDenApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDenApp.swift; sourceTree = "<group>"; };
+		3F5DDC57401300DC1F6DE203 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		400039878B14B785E27272E8 /* NewPaddyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPaddyView.swift; sourceTree = "<group>"; };
+		40400F11256E544F0276A44A /* Slot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Slot.swift; sourceTree = "<group>"; };
+		55C33D0167EE0BD4B953168D /* ContentSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentSnapshot.swift; sourceTree = "<group>"; };
+		56640E6CCA98DF11144139D7 /* NewDen.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = NewDen.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		56F2765AAF66EF0EA5520E83 /* DenCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenCellView.swift; sourceTree = "<group>"; };
+		621DD89E77741966DC15FD08 /* DenEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenEditorView.swift; sourceTree = "<group>"; };
+		80398DD02F8C34DE2D02562A /* DenCellLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenCellLabel.swift; sourceTree = "<group>"; };
+		85C9DD1CABCACC00F1F983AF /* AppRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRootView.swift; sourceTree = "<group>"; };
+		8BDE136C17F249E98A397691 /* PaddyListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddyListView.swift; sourceTree = "<group>"; };
+		9426BC146B2ED54051719B23 /* SlotSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlotSnapshot.swift; sourceTree = "<group>"; };
+		A8A8CF20E3E77CA74CC7719A /* NewDenMigrationPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDenMigrationPlan.swift; sourceTree = "<group>"; };
+		AC67977F59619A005124C007 /* NewDenTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = NewDenTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B18C9121C703DB426A7D141B /* NewDenUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDenUITests.swift; sourceTree = "<group>"; };
+		B67FCC421047EEF3A28059EF /* DenStoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenStoreError.swift; sourceTree = "<group>"; };
+		BC18435AC35527804D7DC0FF /* DenStore+History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DenStore+History.swift"; sourceTree = "<group>"; };
+		BDC13614A311884B99C9B519 /* DenStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenStoreTests.swift; sourceTree = "<group>"; };
+		CF23D83F1F4A3D5022CDE74D /* StoreStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreStatusView.swift; sourceTree = "<group>"; };
+		E2690A95791903C73E6815BC /* DenKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenKind.swift; sourceTree = "<group>"; };
+		E27D7DB9B5BBB32ABF06EB0E /* Den.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Den.swift; sourceTree = "<group>"; };
+		FE248DB1649A40E7D56CC6C4 /* NewDenUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = NewDenUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0B74E4243264E72B5E455163 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				578FE824B9D4E32F08EE7BA1 /* DenEditor */,
+				40AE77277E25393C413C4097 /* PaddyList */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		0D4A36E06509A95F5512F1D0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				56640E6CCA98DF11144139D7 /* NewDen.app */,
+				AC67977F59619A005124C007 /* NewDenTests.xctest */,
+				FE248DB1649A40E7D56CC6C4 /* NewDenUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0E5DF47035EAC4937DD2CACF /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				343AB646DEA2A322D3ADB7DE /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		290C04DBDAA1408B1C37D77A /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				A8A8CF20E3E77CA74CC7719A /* NewDenMigrationPlan.swift */,
+				3495CEF7EA57E21D5A1F431A /* NewDenSchemaV1.swift */,
+				3F5DDC57401300DC1F6DE203 /* Persistence.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		3104F67972630D69D828B030 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				85C9DD1CABCACC00F1F983AF /* AppRootView.swift */,
+				3D1C09979C798DD0D6F2F95D /* NewDenApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		40AE77277E25393C413C4097 /* PaddyList */ = {
+			isa = PBXGroup;
+			children = (
+				400039878B14B785E27272E8 /* NewPaddyView.swift */,
+				8BDE136C17F249E98A397691 /* PaddyListView.swift */,
+				CF23D83F1F4A3D5022CDE74D /* StoreStatusView.swift */,
+			);
+			path = PaddyList;
+			sourceTree = "<group>";
+		};
+		578FE824B9D4E32F08EE7BA1 /* DenEditor */ = {
+			isa = PBXGroup;
+			children = (
+				2A15FF9C69EAACD8EB793658 /* CellEditorView.swift */,
+				13578707F904432967DA36A4 /* CellSelection.swift */,
+				80398DD02F8C34DE2D02562A /* DenCellLabel.swift */,
+				56F2765AAF66EF0EA5520E83 /* DenCellView.swift */,
+				621DD89E77741966DC15FD08 /* DenEditorView.swift */,
+			);
+			path = DenEditor;
+			sourceTree = "<group>";
+		};
+		6AFE1F5FE2D0B5866DCE8584 /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+				BDC13614A311884B99C9B519 /* DenStoreTests.swift */,
+			);
+			path = Operations;
+			sourceTree = "<group>";
+		};
+		715F168C7A4A3A9FBEA1D3B9 /* NewDenTests */ = {
+			isa = PBXGroup;
+			children = (
+				6AFE1F5FE2D0B5866DCE8584 /* Operations */,
+			);
+			path = NewDenTests;
+			sourceTree = "<group>";
+		};
+		7EEAF2B78D28DB72C870AFED /* NewDen */ = {
+			isa = PBXGroup;
+			children = (
+				3104F67972630D69D828B030 /* App */,
+				0B74E4243264E72B5E455163 /* Features */,
+				AAAAF0A397013CDC47296AFA /* Models */,
+				FD58C2CC5743CF32A38F2E24 /* Operations */,
+				290C04DBDAA1408B1C37D77A /* Persistence */,
+				0E5DF47035EAC4937DD2CACF /* Resources */,
+			);
+			path = NewDen;
+			sourceTree = "<group>";
+		};
+		AAAAF0A397013CDC47296AFA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				21B59ACCA21E41B12995EA78 /* Content.swift */,
+				E27D7DB9B5BBB32ABF06EB0E /* Den.swift */,
+				E2690A95791903C73E6815BC /* DenKind.swift */,
+				1650618670AFF3FC279B4D5F /* Paddy.swift */,
+				40400F11256E544F0276A44A /* Slot.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		C383D56FABCCDF5309F20EE2 = {
+			isa = PBXGroup;
+			children = (
+				7EEAF2B78D28DB72C870AFED /* NewDen */,
+				715F168C7A4A3A9FBEA1D3B9 /* NewDenTests */,
+				F2F68D1731013A91A001ACA4 /* NewDenUITests */,
+				0D4A36E06509A95F5512F1D0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F2F68D1731013A91A001ACA4 /* NewDenUITests */ = {
+			isa = PBXGroup;
+			children = (
+				B18C9121C703DB426A7D141B /* NewDenUITests.swift */,
+			);
+			path = NewDenUITests;
+			sourceTree = "<group>";
+		};
+		FD58C2CC5743CF32A38F2E24 /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+				55C33D0167EE0BD4B953168D /* ContentSnapshot.swift */,
+				1CCD9D95EA62543F59FA1C61 /* DenSnapshot.swift */,
+				178AF3CFB55F3E0ACF03F584 /* DenStore.swift */,
+				BC18435AC35527804D7DC0FF /* DenStore+History.swift */,
+				B67FCC421047EEF3A28059EF /* DenStoreError.swift */,
+				08AE4FB396393EEC6BE074D4 /* PaddySnapshot.swift */,
+				9426BC146B2ED54051719B23 /* SlotSnapshot.swift */,
+			);
+			path = Operations;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1583277D05D705D1A9860DFF /* NewDen */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AB3B5AA0096D0712DA38E309 /* Build configuration list for PBXNativeTarget "NewDen" */;
+			buildPhases = (
+				EE94ACF65D0630C0AE4DCC36 /* Sources */,
+				934C5B077114CE7FB68255D7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NewDen;
+			packageProductDependencies = (
+			);
+			productName = NewDen;
+			productReference = 56640E6CCA98DF11144139D7 /* NewDen.app */;
+			productType = "com.apple.product-type.application";
+		};
+		78E27F8E45AC379665898332 /* NewDenTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E9C98C087B7BA02E3561D611 /* Build configuration list for PBXNativeTarget "NewDenTests" */;
+			buildPhases = (
+				61AA59EF7DB4FE3D60A975E3 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C5A8E91423D861A3F3751641 /* PBXTargetDependency */,
+			);
+			name = NewDenTests;
+			packageProductDependencies = (
+			);
+			productName = NewDenTests;
+			productReference = AC67977F59619A005124C007 /* NewDenTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		9FD9D609BAA4C327D262422F /* NewDenUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 510E982ACCF40F741DC86614 /* Build configuration list for PBXNativeTarget "NewDenUITests" */;
+			buildPhases = (
+				8220B3BF7E3864375885FCC9 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				96E09355B2B0B393079BAA4F /* PBXTargetDependency */,
+			);
+			name = NewDenUITests;
+			packageProductDependencies = (
+			);
+			productName = NewDenUITests;
+			productReference = FE248DB1649A40E7D56CC6C4 /* NewDenUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3556DF58EB6E7624CBE7ECA0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					1583277D05D705D1A9860DFF = {
+						ProvisioningStyle = Automatic;
+					};
+					78E27F8E45AC379665898332 = {
+						ProvisioningStyle = Automatic;
+					};
+					9FD9D609BAA4C327D262422F = {
+						ProvisioningStyle = Automatic;
+						TestTargetID = 1583277D05D705D1A9860DFF;
+					};
+				};
+			};
+			buildConfigurationList = 238199852ED5303E6D0C722C /* Build configuration list for PBXProject "NewDen" */;
+			developmentRegion = ja;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				ja,
+			);
+			mainGroup = C383D56FABCCDF5309F20EE2;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 0D4A36E06509A95F5512F1D0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1583277D05D705D1A9860DFF /* NewDen */,
+				78E27F8E45AC379665898332 /* NewDenTests */,
+				9FD9D609BAA4C327D262422F /* NewDenUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		934C5B077114CE7FB68255D7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C562D9C597CF935CEE057BEF /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		61AA59EF7DB4FE3D60A975E3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9471E17A493820D7CA58557A /* DenStoreTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8220B3BF7E3864375885FCC9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C170AA4ED1A94CDFC7D592C8 /* NewDenUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EE94ACF65D0630C0AE4DCC36 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A6CA9B9B39B50A63C7EFAB8 /* AppRootView.swift in Sources */,
+				459B3BD043E18357D7C86838 /* CellEditorView.swift in Sources */,
+				E7D27F5A7981E04FCC9753BB /* CellSelection.swift in Sources */,
+				68645E374893FF1F90FC5240 /* Content.swift in Sources */,
+				4C149E19B81EB871E163370A /* ContentSnapshot.swift in Sources */,
+				D57FC36B914FEAAAD2F70297 /* Den.swift in Sources */,
+				68BA3BB6A87AD8ED474E2A63 /* DenCellLabel.swift in Sources */,
+				1DBD9647B2205B01E5B72BA3 /* DenCellView.swift in Sources */,
+				22630642409838C0C7D73E02 /* DenEditorView.swift in Sources */,
+				0A13C75BAB88878B75B5F201 /* DenKind.swift in Sources */,
+				D9199AE1D5A953A467409AC0 /* DenSnapshot.swift in Sources */,
+				07EE65C24DD960965FF79BD2 /* DenStore+History.swift in Sources */,
+				574AF45D706EA1E4227FAFDC /* DenStore.swift in Sources */,
+				8ACF672988196915FA31FA40 /* DenStoreError.swift in Sources */,
+				1F14E053F9DC5228863B4B2F /* NewDenApp.swift in Sources */,
+				3189B3C9AC76A7AAF9BE1482 /* NewDenMigrationPlan.swift in Sources */,
+				9EA11A6E916B45DBAD9B3F72 /* NewDenSchemaV1.swift in Sources */,
+				5457AF07368F1471489CCE16 /* NewPaddyView.swift in Sources */,
+				9438956D63C37BD5CC34E44B /* Paddy.swift in Sources */,
+				D9E3B0885937D879F29BA195 /* PaddyListView.swift in Sources */,
+				0C22654163ADB155D73052D0 /* PaddySnapshot.swift in Sources */,
+				37854DD001316B90AEBC9C46 /* Persistence.swift in Sources */,
+				FACC2F72A0BCB8556DA0F64E /* Slot.swift in Sources */,
+				C35EE81641D41BA16D96437E /* SlotSnapshot.swift in Sources */,
+				C28317853DE909732E2B0B84 /* StoreStatusView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		96E09355B2B0B393079BAA4F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1583277D05D705D1A9860DFF /* NewDen */;
+			targetProxy = 4370A4E6CE1A9E3AF0EC439B /* PBXContainerItemProxy */;
+		};
+		C5A8E91423D861A3F3751641 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1583277D05D705D1A9860DFF /* NewDen */;
+			targetProxy = 08F2546FD607FC7AFF2D71F5 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		06633ED4D49293D282D7A884 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = jp.ataraxia.NewDenUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = NewDen;
+			};
+			name = Release;
+		};
+		1FCC84F8FB589E02C00707B1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = jp.ataraxia.NewDenTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NewDen.app/NewDen";
+			};
+			name = Release;
+		};
+		2A974F0327D23D65F05FE5C5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = jp.ataraxia.NewDenTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NewDen.app/NewDen";
+			};
+			name = Debug;
+		};
+		3674E79EBD26098D301DAAAB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = NewDen;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = jp.ataraxia.NewDen;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		38B25D73271093AC300FD7D6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = NewDen;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = jp.ataraxia.NewDen;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4284F8EFAF0CBD2D54888F2E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		AA99CE6581BFA62D48B99E21 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = jp.ataraxia.NewDenUITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = NewDen;
+			};
+			name = Debug;
+		};
+		D7EDB7E1BD2FDDB26B1ECDCC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		238199852ED5303E6D0C722C /* Build configuration list for PBXProject "NewDen" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4284F8EFAF0CBD2D54888F2E /* Debug */,
+				D7EDB7E1BD2FDDB26B1ECDCC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		510E982ACCF40F741DC86614 /* Build configuration list for PBXNativeTarget "NewDenUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA99CE6581BFA62D48B99E21 /* Debug */,
+				06633ED4D49293D282D7A884 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		AB3B5AA0096D0712DA38E309 /* Build configuration list for PBXNativeTarget "NewDen" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				38B25D73271093AC300FD7D6 /* Debug */,
+				3674E79EBD26098D301DAAAB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E9C98C087B7BA02E3561D611 /* Build configuration list for PBXNativeTarget "NewDenTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2A974F0327D23D65F05FE5C5 /* Debug */,
+				1FCC84F8FB589E02C00707B1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3556DF58EB6E7624CBE7ECA0 /* Project object */;
+}

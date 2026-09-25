@@ -1,0 +1,46 @@
+name: NewDen
+options:
+  bundleIdPrefix: jp.ataraxia
+  deploymentTarget:
+    iOS: "26.0"
+  developmentLanguage: ja
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    TARGETED_DEVICE_FAMILY: "1"
+    GENERATE_INFOPLIST_FILE: YES
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: 1
+    CODE_SIGN_STYLE: Automatic
+targets:
+  NewDen:
+    type: application
+    platform: iOS
+    sources: [NewDen]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: jp.ataraxia.NewDen
+        INFOPLIST_KEY_CFBundleDisplayName: NewDen
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        ENABLE_PREVIEWS: YES
+  NewDenTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [NewDenTests]
+    dependencies:
+      - target: NewDen
+  NewDenUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [NewDenUITests]
+    dependencies:
+      - target: NewDen
+schemes:
+  NewDen:
+    build:
+      targets:
+        NewDen: all
+    test:
+      targets: [NewDenTests, NewDenUITests]

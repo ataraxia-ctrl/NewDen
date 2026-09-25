@@ -2,7 +2,7 @@
 
 concept.md の決定事項を、SwiftData のモデルに落とし込んだ設計。
 
-- ステータス: 設計（未実装）
+- ステータス: 段階1〜3のローカル保存を実装（リンク・参照・発展・同期は未実装）
 - 最終更新: 2026-09-25
 - 前提: SwiftData を使い、iCloud（CloudKit）で同期する
 
@@ -260,7 +260,9 @@ enum DenKind: String, Codable, CaseIterable {
 
 ## 10. 元に戻す（Undo）
 
-SwiftData の `UndoManager` 連携を使う。
+初期設計ではSwiftDataの自動Undo連携を予定していた。段階1〜3の実装検証で自動Undoによる関係欠落・cascade削除の復元時クラッシュを再現したため、現在は **対象の田んぼの値スナップショットをシステムの `UndoManager` に登録する方式** を使う。`ModelContext.undoManager` の自動登録は無効。UUIDを維持して復元し、Undo／Redo直後に保存する。
+
+以下は初期の自動連携案。実装との差分・検証経緯は [implementation-plan.md の8章](implementation-plan.md#8-最初の実装単位の実装結果2026-09-25) を参照。
 
 ### しくみ
 
