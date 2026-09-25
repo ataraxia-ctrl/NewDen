@@ -124,11 +124,6 @@ button,select,textarea{font:inherit;color:inherit}
 .side section{display:flex;flex-direction:column;gap:10px}
 .side h2{margin:0;font-size:13px;letter-spacing:.12em;color:var(--muted);font-weight:700}
 .side p{margin:0;max-width:60ch}
-.seg{display:inline-flex;background:var(--screen);border:1px solid var(--line-soft);border-radius:11px;padding:3px;gap:3px;align-self:flex-start;flex-wrap:wrap}
-.seg input{position:absolute;opacity:0;pointer-events:none}
-.seg label{padding:6px 14px;border-radius:8px;font-size:14px;cursor:pointer;color:var(--muted)}
-.seg input:checked+label{background:var(--accent);color:var(--accent-ink);font-weight:700}
-.seg input:focus-visible+label{outline:2px solid var(--accent);outline-offset:2px}
 .trees{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
 .tree{width:100%;text-align:left;display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:12px;border:1px solid var(--line-soft);background:var(--screen);cursor:pointer}
 .tree.on{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
@@ -154,7 +149,7 @@ button,select,textarea{font:inherit;color:inherit}
       <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect x="1.5" y="1.5" width="15.5" height="15.5" fill="var(--tint)"/><rect x="1.5" y="1.5" width="31" height="31" fill="none" stroke="var(--line)" stroke-width="2.5"/><path d="M17 1.5V32.5M1.5 17H32.5" stroke="var(--line)" stroke-width="2"/></svg>
       NewDen <small>入れ子表示モック</small>
     </div>
-    <p>docs/concept.md の決定事項をもとにした試作です。ズームの方式を2つ切り替えて、入れ子表示のジェスチャーを比べられます。書いた内容はこのブラウザにだけ保存されます。</p>
+    <p>docs/concept.md の決定事項をもとにした試作です。連続ズームとの比較を経て、段階ズームを採用しました。書いた内容はこのブラウザにだけ保存されます。</p>
   </header>
 
   <main class="layout">
@@ -179,11 +174,7 @@ button,select,textarea{font:inherit;color:inherit}
 
     <aside class="side">
       <section>
-        <h2>ズームの方式</h2>
-        <div class="seg" role="radiogroup" aria-label="ズームの方式">
-          <input type="radio" name="mode" id="mode-free" value="free" checked><label for="mode-free">連続ズーム</label>
-          <input type="radio" name="mode" id="mode-step" value="step"><label for="mode-step">段階ズーム</label>
-        </div>
+        <h2>ズームの方式：段階ズーム</h2>
         <p id="modeDesc"></p>
       </section>
 
@@ -204,14 +195,14 @@ button,select,textarea{font:inherit;color:inherit}
       </section>
 
       <section>
-        <h2>このモックで確かめたいこと</h2>
-        <ol class="checks">
-          <li>連続ズームと段階ズームのどちらが、全体を一望しやすく、迷いにくいか。</li>
-          <li>上の階層へ戻る操作は、指を閉じる・パンくず・周りの田をタップ・主題のマスの「親の田へ」のどれが自然か。</li>
-          <li>周りの田が薄く見えていることで、いまの位置がわかりやすくなるか。</li>
-          <li>文字を省略し始める大きさ（今は1マスが約62px未満）は適切か。</li>
-          <li>3つ埋めないと子を作れない制約が、書く流れを止めすぎないか。</li>
-        </ol>
+        <h2>モックで決まったこと</h2>
+        <ul class="checks">
+          <li>ズームは段階ズームにする。連続ズームより迷いにくい。</li>
+          <li>上へ戻る操作は、指を閉じる・パンくず・周りの田をタップの3つ。「親の田へ」ボタンは置かない。</li>
+          <li>周りの田を薄く表示すると、いまの位置がわかりやすい。</li>
+          <li>文字を省略し始める大きさは、1マスが約62px未満のままにする。</li>
+          <li>3つ埋めるまで子を作れない制約は、書く流れを止めすぎない。</li>
+        </ul>
       </section>
 
       <button class="btn reset" id="reset" type="button">サンプルに戻す</button>
@@ -235,7 +226,6 @@ button,select,textarea{font:inherit;color:inherit}
   const TYPE_ORDER = ['goal','event','feel','ask','choice','tgt'];
   const MAX_DEPTH = 3;             // 0始まり。第4層まで
   const KEY = 'newden-mock-v1';
-  const MODE_KEY = 'newden-mock-mode';
   const today = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; })();
 
   function sample() {
@@ -276,10 +266,8 @@ button,select,textarea{font:inherit;color:inherit}
   if (!S || !S.dens || !S.trees) S = sample();
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
 
-  let savedMode = 'free';
-  try { savedMode = localStorage.getItem(MODE_KEY) || 'free'; } catch (e) {}
 
-  const view = { tree:Object.keys(S.trees)[0], focus:null, sel:null, clip:null, mode:savedMode === 'step' ? 'step' : 'free', cam:{ cx:.5, cy:.5, z:300 }, B:360, rects:{} };
+  const view = { tree:Object.keys(S.trees)[0], focus:null, sel:null, clip:null, mode:'step', cam:{ cx:.5, cy:.5, z:300 }, B:360, rects:{} };
   view.focus = S.trees[view.tree].root;
 
   /* ---------- モデル ---------- */
@@ -450,8 +438,7 @@ button,select,textarea{font:inherit;color:inherit}
     if (i === 0) {
       acts.push(`<label class="field">型 <select id="typeSel"${isComplete(d) ? ' disabled' : ''}>${typeOpts(d.type)}</select></label>`);
       if (isComplete(d)) notes.push('完成した田の型は変えられません。考えが変わったときは「発展」で新しい田を作ります（このモックでは未実装）。');
-      if (d.parent) acts.push(btn('up', '親の田へ'));
-      else {
+      if (!d.parent) {
         const branch = treeMaxDepth(d.tree) >= MAX_DEPTH;
         acts.push(btn('make-parent', branch ? '親の田を作る（ブランチ）' : '親の田を作る', { primary:true }));
         notes.push(branch ? 'この田んぼはすでに4層あるので、親の田は新しい田んぼに作り、リンクでつなぎます。'
@@ -496,13 +483,11 @@ button,select,textarea{font:inherit;color:inherit}
   }
 
   const MODE_TEXT = {
-    free: { desc:'地図アプリのように自由に拡大縮小します。指を離すと、画面の中心にある田が「いま見ている田」になります。', hint:'ピンチ・ホイールで拡大縮小 / ドラッグで移動' },
-    step: { desc:'拡大縮小は1段ずつです。指を広げると指の下の田へ入り、指を閉じると1つ上の田へ戻ります。画面はいつも1つの田にぴったり合います。', hint:'指を広げて入る / 閉じて戻る' },
+    step: { desc:'拡大縮小は1段ずつです。指を広げるか子の田をタップすると1段入り、指を閉じると1つ上の田へ戻ります。パンくずや、周りに薄く見えている田のタップでも移動できます。PCではホイールで同じ操作ができます。', hint:'指を広げて入る / 閉じて戻る' },
   };
   function renderMode() {
     $('#modeDesc').textContent = MODE_TEXT[view.mode].desc;
     $('#hint').textContent = MODE_TEXT[view.mode].hint;
-    $('#mode-' + view.mode).checked = true;
     board.style.cursor = view.mode === 'free' ? 'grab' : 'default';
   }
 
@@ -651,7 +636,6 @@ button,select,textarea{font:inherit;color:inherit}
     const sel = view.sel, d = sel && D(sel.den);
     switch (b.dataset.act) {
       case 'dive': focusTo(d.child[sel.idx]); break;
-      case 'up': focusTo(d.parent.den, { den:d.parent.den, idx:d.parent.idx }); break;
       case 'go-link': openTree(d.link[sel.idx]); break;
       case 'jump': { const id = b.dataset.den; openTree(D(id).tree, id, { den:id, idx:+b.dataset.idx }); break; }
       case 'make-child': {
@@ -694,12 +678,6 @@ button,select,textarea{font:inherit;color:inherit}
   });
 
   $('#trees').addEventListener('click', e => { const b = e.target.closest('[data-tree]'); if (b) openTree(b.dataset.tree); });
-  document.querySelectorAll('input[name="mode"]').forEach(r => r.addEventListener('change', () => {
-    view.mode = r.value;
-    try { localStorage.setItem(MODE_KEY, view.mode); } catch (e) {}
-    renderMode();
-    if (view.mode === 'step') animateCam(fitCam(view.focus));
-  }));
   $('#reset').addEventListener('click', () => { S = sample(); view.clip = null; save(); openTree('t1'); toast('サンプルに戻しました'); });
 
   new ResizeObserver(() => {
